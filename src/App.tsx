@@ -3,11 +3,14 @@ import { TeamOverview } from './components/TeamOverview';
 import { UpcomingRounds } from './components/UpcomingRounds';
 import { myTeam as initialTeam, currentRound, teamStats } from './data/myTeam';
 import { MyPlayer } from './types';
-import { Users, Calendar, Trophy } from 'lucide-react';
+import { Users, Calendar, Trophy, Sparkles } from 'lucide-react';
+import axios from 'axios';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'team' | 'rounds'>('team');
   const [players, setPlayers] = useState<MyPlayer[]>(initialTeam);
+  const [advice, setAdvice] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const handleCaptainChange = (playerId: string) => {
     setPlayers(prevPlayers => 
@@ -44,6 +47,21 @@ function App() {
         return player;
       })
     );
+  };
+
+  const getLineupAdvice = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post('http://localhost:5000/api/lineup-advice', {
+        teamData: players,
+      });
+      setAdvice(response.data.advice);
+    } catch (error) {
+      console.error('Error getting lineup advice:', error);
+      setAdvice('Failed to get advice. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -88,13 +106,35 @@ function App() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         {activeTab === 'team' ? (
-          <TeamOverview 
-            players={players} 
-            stats={teamStats}
-            onCaptainChange={handleCaptainChange}
-            onViceCaptainChange={handleViceCaptainChange}
-            onPositionSwap={handlePositionSwap}
-          />
+          <>
+            <TeamOverview 
+              players={players} 
+              stats={teamStats}
+              onCaptainChange={handleCaptainChange}
+              onViceCaptainChange={handleViceCaptainChange}
+              onPositionSwap={handlePositionSwap}
+            />
+
+            {/* GPT Advice Button + Output */}
+            <div className="mt-6 flex flex-col items-start gap-4">
+              <button
+                onClick={getLineupAdvice}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-700 transition"
+              >
+                <Sparkles className="w-5 h-5" />
+                Get Lineup Advice
+              </button>
+
+              {loading && <p className="text-gray-600">Getting advice from the Fantasy gods...</p>}
+
+              {advice && (
+                <div className="bg-white p-4 rounded-lg shadow-md w-full mt-4 whitespace-pre-wrap border border-gray-200">
+                  <h2 className="text-lg font-semibold mb-2">Lineup Advice:</h2>
+                  <p>{advice}</p>
+                </div>
+              )}
+            </div>
+          </>
         ) : (
           <UpcomingRounds currentRound={currentRound} />
         )}

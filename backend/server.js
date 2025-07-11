@@ -1,11 +1,13 @@
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const cors = require('cors');  // <- add this
 require('dotenv').config();
 
 const app = express();
 const PORT = 5000;
 
+app.use(cors());  // <- add this to allow CORS
 app.use(bodyParser.json());
 
 app.post('/api/lineup-advice', async (req, res) => {
@@ -25,7 +27,7 @@ Please return a structured lineup suggestion, with bench usage notes and reasoni
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4',
+        model: 'gpt-4.1-nano',
         messages: [
           { role: 'system', content: 'You are a helpful NRL Fantasy expert.' },
           { role: 'user', content: prompt }
@@ -44,6 +46,7 @@ Please return a structured lineup suggestion, with bench usage notes and reasoni
     res.json({ advice: reply });
   } catch (error) {
     console.error('OpenAI error:', error.response?.data || error.message);
+    console.error('Full error details:', error.response?.data || error.message || error);
     res.status(500).json({ error: 'Failed to get advice from GPT.' });
   }
 });
