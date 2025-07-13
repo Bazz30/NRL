@@ -27,7 +27,7 @@ Please return a structured lineup suggestion, with bench usage notes and reasoni
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4.1-nano',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: 'You are a helpful NRL Fantasy expert.' },
           { role: 'user', content: prompt }
