@@ -1,0 +1,26 @@
+{
+  "name": "nrl-data-updater",
+  "version": "1.0.0",
+  "description": "Automated data updater for NRL Fantasy application",
+  "main": "update-data.js",
+  "scripts": {
+    "update": "node update-data.js",
+    "update:players": "node update-data.js players",
+    "update:rounds": "node update-data.js rounds",
+    "update:ladder": "node update-data.js ladder",
+    "update:all": "node update-data.js all",
+    "update:advanced": "node advanced-scraper.js all",
+    "debug": "node debug-scraper.js all"
+  },
+  "dependencies": {
+    "puppeteer": "^24.12.1"
+  },
+  "keywords": [
+    "nrl",
+    "fantasy",
+    "scraping",
+    "data"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

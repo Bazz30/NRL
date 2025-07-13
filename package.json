@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update-data": "cd scripts && npm install && node update-data.js all",
+    "update-data:scrape": "cd scripts && npm install && node update-data.js all",
+    "update-data:advanced": "cd scripts && npm install && node advanced-scraper.js all"
   },
   "dependencies": {
     "axios": "^1.10.0",

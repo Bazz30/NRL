@@ -356,7 +356,7 @@ export const LivePlayerStats: React.FC = () => {
                 <div>
                   <span className="text-gray-500">Live Points:</span>
                   <span className="ml-1 font-medium text-green-600">
-                    {fantasyPoints.toFixed(1)}
+                    {Math.round(fantasyPoints)}
                   </span>
                 </div>
                 <div>
@@ -365,7 +365,9 @@ export const LivePlayerStats: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-gray-500">Round {selectedRound}:</span>
-                  <span className="ml-1 font-medium">{roundScore}</span>
+                  <span className="ml-1 font-medium">
+                    {selectedRound === getCurrentRound() ? Math.round(fantasyPoints) : roundScore}
+                  </span>
                 </div>
               </div>
 

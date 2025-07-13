@@ -6,27 +6,55 @@ import roundsData from '../data/rounds.json'; // Import the rounds data
 export const getCurrentRound = (): number => {
   try {
     const now = new Date();
-    const currentTime = now.getTime();
+    const nowUtc = Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds()
+    );
     
     // Find the current round based on date ranges
     for (const round of roundsData) {
       const startDate = new Date(round.start);
       const endDate = new Date(round.end);
-      
-      // Check if current time falls within this round's date range
-      if (currentTime >= startDate.getTime() && currentTime <= endDate.getTime()) {
+      const startUtc = Date.UTC(
+        startDate.getUTCFullYear(),
+        startDate.getUTCMonth(),
+        startDate.getUTCDate(),
+        startDate.getUTCHours(),
+        startDate.getUTCMinutes(),
+        startDate.getUTCSeconds()
+      );
+      const endUtc = Date.UTC(
+        endDate.getUTCFullYear(),
+        endDate.getUTCMonth(),
+        endDate.getUTCDate(),
+        endDate.getUTCHours(),
+        endDate.getUTCMinutes(),
+        endDate.getUTCSeconds()
+      );
+      // Check if current UTC time falls within this round's date range
+      if (nowUtc >= startUtc && nowUtc <= endUtc) {
         return round.id;
       }
     }
-    
     // If no current round found, find the next upcoming round
     for (const round of roundsData) {
       const startDate = new Date(round.start);
-      if (currentTime < startDate.getTime()) {
+      const startUtc = Date.UTC(
+        startDate.getUTCFullYear(),
+        startDate.getUTCMonth(),
+        startDate.getUTCDate(),
+        startDate.getUTCHours(),
+        startDate.getUTCMinutes(),
+        startDate.getUTCSeconds()
+      );
+      if (nowUtc < startUtc) {
         return round.id;
       }
     }
-    
     // Fallback to the last round if we're past all rounds
     return roundsData[roundsData.length - 1]?.id || 19;
   } catch (error) {
