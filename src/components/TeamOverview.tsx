@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MyPlayer, TeamStats, PositionCount } from '../types';
 import { Crown, Shield, AlertTriangle, TrendingUp, DollarSign, Users, Star, ArrowLeftRight, Calendar, ChevronDown, ChevronUp, X, Info, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getCurrentRound } from '../data/myTeam';
 
 interface TeamOverviewProps {
   players: MyPlayer[];
@@ -22,7 +23,7 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
   const [isByeRoundsCollapsed, setIsByeRoundsCollapsed] = useState(true);
   const [selectedTeamFilter, setSelectedTeamFilter] = useState<string | null>(null);
   const [showRoundSelector, setShowRoundSelector] = useState(false);
-  const [selectedRound, setSelectedRound] = useState<number>(17); // Default to current round
+  const [selectedRound, setSelectedRound] = useState<number>(getCurrentRound()); // Default to current round
 
   const formatPrice = (price: number) => `$${(price / 1000).toFixed(0)}k`;
   
@@ -226,11 +227,11 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold mb-2">
-              {selectedRound === 17 ? 'Current Round: ' : 'Viewing Round: '}{selectedRound}
+              {selectedRound === getCurrentRound() ? 'Current Round: ' : 'Viewing Round: '}{selectedRound}
             </h2>
             <p className="text-indigo-100">
               NRL Season 2025 • Week {selectedRound} of 27
-              {selectedRound !== 17 && (
+              {selectedRound !== getCurrentRound() && (
                 <span className="ml-2 px-2 py-1 bg-white/20 rounded text-sm">
                   Preview Mode
                 </span>
@@ -297,16 +298,16 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
             
             <div className="mt-3 flex flex-wrap gap-2">
               <button
-                onClick={() => handleRoundChange(17)}
+                onClick={() => handleRoundChange(getCurrentRound())}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  selectedRound === 17 
+                  selectedRound === getCurrentRound() 
                     ? 'bg-white text-indigo-600' 
                     : 'bg-white/20 text-white hover:bg-white/30'
                 }`}
               >
-                Current (17)
+                Current ({getCurrentRound()})
               </button>
-              {[18, 19, 20, 21, 22, 23, 24, 25, 26, 27].map(round => (
+              {[getCurrentRound(), getCurrentRound() + 1, getCurrentRound() + 2, getCurrentRound() + 3, getCurrentRound() + 4, getCurrentRound() + 5, getCurrentRound() + 6, getCurrentRound() + 7, getCurrentRound() + 8].filter(round => round <= 27).map(round => (
                 <button
                   key={round}
                   onClick={() => handleRoundChange(round)}

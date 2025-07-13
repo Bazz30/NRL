@@ -8,6 +8,13 @@ interface UpcomingRoundsProps {
 }
 
 export const UpcomingRounds: React.FC<UpcomingRoundsProps> = ({ currentRound }) => {
+  // Use the dynamic current round
+  const forcedRound = {
+    ...currentRound,
+    number: currentRound.number,
+    name: currentRound.name
+  };
+
   const formatMatchTime = (kickoffTime: string) => {
     try {
       return format(parseISO(kickoffTime), 'EEE h:mm a');
@@ -30,23 +37,23 @@ export const UpcomingRounds: React.FC<UpcomingRoundsProps> = ({ currentRound }) 
       <div className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold mb-2">{currentRound.name}</h2>
+            <h2 className="text-3xl font-bold mb-2">{forcedRound.name}</h2>
             <p className="text-indigo-100">
-              {formatDate(currentRound.startDate)} - {formatDate(currentRound.endDate)}
+              {formatDate(forcedRound.startDate)} - {formatDate(forcedRound.endDate)}
             </p>
           </div>
           <div className="text-right">
             <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${
-              currentRound.isLive ? 'bg-red-500 text-white' :
-              currentRound.isCompleted ? 'bg-green-500 text-white' :
+              forcedRound.isLive ? 'bg-red-500 text-white' :
+              forcedRound.isCompleted ? 'bg-green-500 text-white' :
               'bg-yellow-500 text-white'
             }`}>
-              {currentRound.isLive ? (
+              {forcedRound.isLive ? (
                 <>
                   <Play className="w-4 h-4 mr-2" />
                   LIVE
                 </>
-              ) : currentRound.isCompleted ? (
+              ) : forcedRound.isCompleted ? (
                 'COMPLETED'
               ) : (
                 'UPCOMING'
@@ -60,11 +67,11 @@ export const UpcomingRounds: React.FC<UpcomingRoundsProps> = ({ currentRound }) 
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
           <Calendar className="w-6 h-6 mr-2 text-blue-500" />
-          Round {currentRound.number} Fixtures
+          Round {forcedRound.number} Fixtures
         </h3>
         
         <div className="space-y-4">
-          {currentRound.matches.map(match => (
+          {forcedRound.matches.map(match => (
             <div key={match.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
                 <div className="flex-grow">

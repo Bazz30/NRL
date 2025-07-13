@@ -18,9 +18,12 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
     <header className="bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
-          <div className="flex items-center space-x-3">
+          <div
+            className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => onTabChange('team')}
+          >
             <Trophy className="w-8 h-8" />
-            <h1 className="text-2xl font-bold">NRL Fantasy</h1>
+            <h1 className="text-2xl font-bold">My NRL Fantasy</h1>
           </div>
           
           <nav className="flex space-x-1">

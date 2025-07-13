@@ -1,9 +1,39 @@
 import { MyPlayer, Round, TeamStats } from '../types';
+import React from 'react';
+import roundsData from '../data/rounds.json'; // Import the rounds data
 
 // Function to get current round (you can adjust this logic as needed)
-const getCurrentRound = (): number => {
-  // For now, we'll set it to 17 as mentioned
-  return 17;
+export const getCurrentRound = (): number => {
+  try {
+    const now = new Date();
+    const currentTime = now.getTime();
+    
+    // Find the current round based on date ranges
+    for (const round of roundsData) {
+      const startDate = new Date(round.start);
+      const endDate = new Date(round.end);
+      
+      // Check if current time falls within this round's date range
+      if (currentTime >= startDate.getTime() && currentTime <= endDate.getTime()) {
+        return round.id;
+      }
+    }
+    
+    // If no current round found, find the next upcoming round
+    for (const round of roundsData) {
+      const startDate = new Date(round.start);
+      if (currentTime < startDate.getTime()) {
+        return round.id;
+      }
+    }
+    
+    // Fallback to the last round if we're past all rounds
+    return roundsData[roundsData.length - 1]?.id || 19;
+  } catch (error) {
+    console.error('Error calculating current round:', error);
+    // Fallback to round 19 if there's an error
+    return 19;
+  }
 };
 
 // Bye rounds data
@@ -55,7 +85,7 @@ const getPlayerStatus = (team: string, selectedForOrigin: boolean): 'Playing' | 
 export const myTeam: MyPlayer[] = [
   {
     id: '1',
-    name: 'E.Clark',
+    name: 'Erin Clark',
     team: 'Warriors',
     position: ['HOK'],
     secondaryPosition: ['MID'],
@@ -64,12 +94,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 58,
     selectedRound: 17,
     selectedForOrigin: false,
-    status: getPlayerStatus('Warriors', false),
-    weekInTopic: 18
+    status: getPlayerStatus('Warriors', false)
   },
   {
     id: '2',
-    name: 'I.King-Togia',
+    name: 'Lyhkan King-Togia',
     team: 'Dragons',
     position: ['HLF'],
     secondaryPosition: [],
@@ -78,12 +107,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 28.5,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Dragons', false),
-    weekInTopic: 12
+    status: getPlayerStatus('Dragons', false)
   },
   {
     id: '3',
-    name: 'C.Tracey',
+    name: 'Connor Tracey',
     team: 'Bulldogs',
     position: ['WFB'],
     secondaryPosition: [],
@@ -92,12 +120,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 41.6,
     selectedRound: 18,
     selectedForOrigin: false,
-    status: getPlayerStatus('Bulldogs', false),
-    weekInTopic: 8
+    status: getPlayerStatus('Bulldogs', false)
   },
   {
     id: '4',
-    name: 'P.Haas',
+    name: 'Payne Haas',
     team: 'Broncos',
     position: ['MID'],
     secondaryPosition: [],
@@ -106,12 +133,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 43.1,
     selectedRound: 15,
     selectedForOrigin: true,
-    status: getPlayerStatus('Broncos', true),
-    weekInTopic: 15
+    status: getPlayerStatus('Broncos', true)
   },
   {
     id: '5',
-    name: 'T.May',
+    name: 'Tyrell May',
     team: 'Tigers',
     position: ['MID'],
     secondaryPosition: [],
@@ -121,12 +147,11 @@ export const myTeam: MyPlayer[] = [
     selectedRound: 15,
     selectedForOrigin: false,
     status: getPlayerStatus('Tigers', false),
-    weekInTopic: 10,
     isCaptain: true
   },
   {
     id: '7',
-    name: 'R.Garrick',
+    name: 'Reuben Garrick',
     team: 'Manly',
     position: ['CTR'],
     secondaryPosition: ['WFB'],
@@ -135,12 +160,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 41.2,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Manly', false),
-    weekInTopic: 14
+    status: getPlayerStatus('Manly', false)
   },
   {
     id: '8',
-    name: 'A.Reynolds',
+    name: 'Adam Reynolds',
     team: 'Broncos',
     position: ['HLF'],
     secondaryPosition: [],
@@ -149,12 +173,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 45.8,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Broncos', false),
-    weekInTopic: 16
+    status: getPlayerStatus('Broncos', false)
   },
   {
     id: '9',
-    name: 'N.Cleary',
+    name: 'Nathan Cleary',
     team: 'Panthers',
     position: ['HLF'],
     secondaryPosition: [],
@@ -163,12 +186,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 54.1,
     selectedRound: 15,
     selectedForOrigin: true,
-    status: getPlayerStatus('Panthers', true),
-    weekInTopic: 18
+    status: getPlayerStatus('Panthers', true)
   },
   {
     id: '10',
-    name: 'D.Lucas',
+    name: 'Dylan Lucas',
     team: 'Knights',
     position: ['CTR'],
     secondaryPosition: ['EDG'],
@@ -177,12 +199,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 25.4,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Knights', false),
-    weekInTopic: 6
+    status: getPlayerStatus('Knights', false)
   },
   {
     id: '11',
-    name: 'E.Katoa',
+    name: 'Eliesa Katoa',
     team: 'Storm',
     position: ['EDG'],
     secondaryPosition: [],
@@ -191,12 +212,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 54.7,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Storm', false),
-    weekInTopic: 4
+    status: getPlayerStatus('Storm', false)
   },
   {
     id: '12',
-    name: 'L.Fainu',
+    name: 'Latu Fainu',
     team: 'Tigers',
     position: ['HLF'],
     secondaryPosition: [],
@@ -205,12 +225,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 16.2,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Tigers', false),
-    weekInTopic: 3
+    status: getPlayerStatus('Tigers', false)
   },
   {
     id: '14',
-    name: 'Hughes',
+    name: 'Jahrome Hughes',
     team: 'Storm',
     position: ['HLF'],
     secondaryPosition: [],
@@ -219,12 +238,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 46.2,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Storm', false),
-    weekInTopic: 15
+    status: getPlayerStatus('Storm', false)
   },
   {
     id: '15',
-    name: 'S.Drinkwater',
+    name: 'Scott Drinkwater',
     team: 'Cowboys',
     position: ['WFB'],
     secondaryPosition: [],
@@ -233,12 +251,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 39.6,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Cowboys', false),
-    weekInTopic: 13
+    status: getPlayerStatus('Cowboys', false)
   },
   {
     id: '16',
-    name: 'H.Farnworth',
+    name: 'Herbie Farnworth',
     team: 'Dolphins',
     position: ['CTR'],
     secondaryPosition: [],
@@ -247,12 +264,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 32.4,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Dolphins', false),
-    weekInTopic: 9
+    status: getPlayerStatus('Dolphins', false)
   },
   {
     id: '17',
-    name: 'N.Whyte',
+    name: 'Naufahu Whyte',
     team: 'Roosters',
     position: ['MID'],
     secondaryPosition: ['EDG'],
@@ -261,12 +277,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 21.8,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Roosters', false),
-    weekInTopic: 5
+    status: getPlayerStatus('Roosters', false)
   },
   {
     id: '18',
-    name: 'D.Cook',
+    name: 'Damien Cook',
     team: 'Dragons',
     position: ['HOK'],
     secondaryPosition: [],
@@ -275,12 +290,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 38.9,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Dragons', false),
-    weekInTopic: 14
+    status: getPlayerStatus('Dragons', false)
   },
   {
     id: '19',
-    name: 'R.Walsh',
+    name: 'Reece Walsh',
     team: 'Broncos',
     position: ['WFB'],
     secondaryPosition: [],
@@ -289,26 +303,24 @@ export const myTeam: MyPlayer[] = [
     averageScore: 52.3,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Broncos', false),
-    weekInTopic: 17
+    status: getPlayerStatus('Broncos', false)
   },
   {
     id: '20',
-    name: 'E.Aitken',
-    team: 'Rabbitohs',
-    position: ['EDG'],
+    name: 'Salesi Foketi',
+    team: 'Roosters',
+    position: ['EDG','MID'],
     secondaryPosition: [],
     price: 552000,
     lastScore: 42,
     averageScore: 26.8,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Rabbitohs', false),
-    weekInTopic: 7
+    status: getPlayerStatus('Rabbitohs', false)
   },
   {
     id: '21',
-    name: 'T.Koula',
+    name: 'Tolutau Koula',
     team: 'Manly',
     position: ['WFB'],
     secondaryPosition: ['CTR'],
@@ -317,13 +329,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 35.6,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Manly', false),
-    weekInTopic: 11
+    status: getPlayerStatus('Manly', false)
   },
-  // Reserve bench players
   {
     id: '22',
-    name: 'J.Brailey',
+    name: 'Jayden Brailey',
     team: 'Knights',
     position: ['HOK'],
     secondaryPosition: [],
@@ -332,12 +342,11 @@ export const myTeam: MyPlayer[] = [
     averageScore: 35.2,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Knights', false),
-    weekInTopic: 8
+    status: getPlayerStatus('Knights', false)
   },
   {
     id: '23',
-    name: 'K.Koloamatangi',
+    name: 'Keaon Koloamatangi',
     team: 'Rabbitohs',
     position: ['MID'],
     secondaryPosition: ['EDG'],
@@ -346,16 +355,15 @@ export const myTeam: MyPlayer[] = [
     averageScore: 42.1,
     selectedRound: 15,
     selectedForOrigin: false,
-    status: getPlayerStatus('Rabbitohs', false),
-    weekInTopic: 12
+    status: getPlayerStatus('Rabbitohs', false)
   }
 ];
 
 export const currentRound: Round = {
-  number: 17,
-  name: 'Round 17',
-  startDate: '2024-07-05',
-  endDate: '2024-07-07',
+  number: getCurrentRound(),
+  name: `Round ${getCurrentRound()}`,
+  startDate: '2024-07-07',
+  endDate: '2024-07-14',
   isLive: false,
   isCompleted: false,
   matches: [

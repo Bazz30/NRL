@@ -10,7 +10,6 @@ export interface MyPlayer {
   selectedRound: number;
   selectedForOrigin: boolean;
   status: 'Playing' | 'Bye' | 'ORIGIN';
-  weekInTopic: number;
   isCaptain?: boolean;
   isViceCaptain?: boolean;
   isEmergency?: boolean;
